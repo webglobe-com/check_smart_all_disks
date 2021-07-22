@@ -121,7 +121,7 @@ if ($opt_d) {
 		exit $ERRORS{'UNKNOWN'};
 	}
 
-	if(grep { $opt_i =~ /$_/ } ('ata','sat', 'scsi', 'megaraid,[0-9]+', 'sat+megaraid,[0-9]', 'nvme')){
+	if(grep { $opt_i =~ /$_/ } ('ata','sat', 'scsi', 'megaraid,[0-9]+', 'sat+megaraid,[0-9]', 'nvme', 'cciss,[0-9]+')){
 		$interface = $opt_i;
 #                if($interface eq 'megaraid'){
 #                    if(defined($opt_n)){

@@ -5,9 +5,9 @@
 #
 
 
-SMARTCHECK=/usr/local/lib/nagios/plugins/check_smart.zcu.pl
+# SMARTCHECK=/usr/local/lib/nagios/plugins/check_smart.zcu.pl
 SMARTCTL="/usr/bin/sudo /usr/sbin/smartctl"
-#SMARTCHECK=./check_smart.zcu.pl
+SMARTCHECK=`dirname $0`/check_smart.zcu.pl
 DEBUG=0
 NAG_RETURN=0 # default OK
 OUTPUT=""
@@ -223,6 +223,15 @@ while IFS='#' read -d '#' -r i; do
 	[ $DEBUG -ne 0 ] && echoerr "DEBUG: device: $device"
 	[ $DEBUG -ne 0 ] && echoerr "DEBUG: drivers: $drivers"
 	case "$drivers" in
+		*hpsa*)
+			if [ -z "$CCISITER" ]; then
+				CCISITER=0
+			else
+				CCISITER=$(($CCISITER+1))
+			fi
+			[ $DEBUG -ne 0 ] && echoerr "DEBUG: $device is hpsa"
+			check_disk $device cciss,$CCISITER
+			;;
 		*megaraid*)
 			[ $DEBUG -ne 0 ] && echoerr "DEBUG: $device is megaraid (test all connected devices)"
 			device_megaraid $device
