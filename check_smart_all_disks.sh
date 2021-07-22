@@ -82,6 +82,9 @@ check_disk() {
 
 	# get parameters from option -o
 	args=$( parse_option $device $interface $subdisk )
+	if [ -n "$global_args" ]; then
+		args="$args $global_args"
+	fi
 	#echo -e "DEBUG: return \n$args"
 
 	if [ -z "$subdisk" ] ; then
@@ -200,8 +203,32 @@ usage() {
 
 # --- read options ----------------------------------------------------
 opt_o=()
-while getopts "h:o:" opt; do
+#   -r/--realloc    minimum of accepted reallocated sectors (actual value: 0)
+#   -p/--pending    minimum of accepted pending sectors (actual value: 0)
+#   -c/--checksum   disable checksum log structure (default: enable)
+#   -l/--log        disable check of SMART logs (default: enable)
+#   -f/--failure    disable warning when disk may be close to failure)
+#      --debug      show debugging information
+#   -h/--help       this help
+#   -v/--version    show version of this plugin
+global_args=""
+while getopts "h:o:r:p:clf" opt; do
   case $opt in
+	r)
+		global_args="$global_args -r $OPTARG"
+		;;
+	p)
+		global_args="$global_args -p $OPTARG"
+		;;
+	c)
+		global_args="$global_args -c"
+		;;
+	l)
+		global_args="$global_args -l"
+		;;
+	f)
+		global_args="$global_args -f"
+		;;
     o)
 	opt_o+=("#$OPTARG#")
       ;;
@@ -212,6 +239,7 @@ while getopts "h:o:" opt; do
       ;;
   esac
 done
+export global_args
 
 # ---------------------------------------------------------------------
 
@@ -230,6 +258,7 @@ while IFS='#' read -d '#' -r i; do
 				CCISITER=$(($CCISITER+1))
 			fi
 			[ $DEBUG -ne 0 ] && echoerr "DEBUG: $device is hpsa"
+			export global_args="$global_args -c"
 			check_disk $device cciss,$CCISITER
 			;;
 		*megaraid*)
