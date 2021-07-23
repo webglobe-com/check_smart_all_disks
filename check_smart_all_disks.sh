@@ -301,6 +301,10 @@ while IFS='#' read -d '#' -r i; do
 			[ $DEBUG -ne 0 ] && echoerr "DEBUG: $device is mpt3sas (scsi)"
 			check_disk $device scsi
 			;;
+		*isci*)
+			[ $DEBUG -ne 0 ] && echoerr "DEBUG: $device is isci (sat)"
+			check_disk $device sat
+			;;
 		*nvme*)
 			[ $DEBUG -ne 0 ] && echoerr "DEBUG: $device is nvme (pcieport)"
 			check_disk ${device::-3} nvme # delete last two chars: nvme0n1 -> nvme0
