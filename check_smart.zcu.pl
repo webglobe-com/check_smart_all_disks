@@ -43,6 +43,7 @@ my $basename = basename($0);
 my $revision = '1.0.7';
 
 use lib '/usr/lib/nagios/plugins/';
+use lib '/usr/lib64/nagios/plugins/';
 use utils qw(%ERRORS &print_revision &support &usage);
 
 $ENV{'PATH'}='/bin:/usr/bin:/sbin:/usr/sbin';
