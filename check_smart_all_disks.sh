@@ -340,7 +340,5 @@ else
 	OUTPUT_FMT="$OUTPUT"
 fi
 
-echo "$OUTPUT_FMT | $PERFORMANCE"
+echo "$OUTPUT_FMT | $PERFORMANCE" | grep -v 'OK:'
 exit $NAG_RETURN
-
-
